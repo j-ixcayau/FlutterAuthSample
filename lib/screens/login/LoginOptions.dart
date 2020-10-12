@@ -78,7 +78,7 @@ class _LoginOptionsState extends State<LoginOptions> {
           ),
           SizedBox(height: 20),
           AppleSignInButton(style: AppleButtonStyle.black),
-          GoogleSignInButton(),
+          GoogleSignInButton(onPressed: () => loginWith(AuthType.google)),
           TwitterSignInButton(),
           FacebookSignInButton(onPressed: () => loginWith(AuthType.facebook)),
           FlatButton(
@@ -115,6 +115,10 @@ class _LoginOptionsState extends State<LoginOptions> {
         case AuthType.facebook:
           userCredential = await _auth.loginFacebook();
           break;
+        case AuthType.google:
+          userCredential = await _auth.loginGoogle();
+          break;
+
         default:
       }
 

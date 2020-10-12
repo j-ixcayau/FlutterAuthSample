@@ -54,6 +54,8 @@
         </dict>
     </array>
 
+    
+    <!-- Facebook Sign-in Section -->
     <key>FacebookAppID</key>
     <string>672205383408645</string>
     
@@ -67,5 +69,20 @@
         <string>fbauth2</string>
         <string>fbshareextension</string>
     </array>
+    <!-- End of the Facebook Sign-in Section -->
+    
+    <!-- Google Sign-in Section -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.googleusercontent.apps.900071776237-q7fa0s2gcak8bumjc3h5avsatmdatfdk</string>
+            </array>
+        </dict>
+    </array>
+    <!-- End of the Google Sign-in Section -->
 </dict>
 </plist>
