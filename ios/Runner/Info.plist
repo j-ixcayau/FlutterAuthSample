@@ -23,7 +23,7 @@
         <key>CFBundleVersion</key>
         <string>$(FLUTTER_BUILD_NUMBER)</string>
         <key>LSRequiresIPhoneOS</key>
-        <true/>
+        <true />
         <key>UILaunchStoryboardName</key>
         <string>LaunchScreen</string>
         <key>UIMainStoryboardFile</key>
@@ -42,15 +42,15 @@
             <string>UIInterfaceOrientationLandscapeRight</string>
         </array>
         <key>UIViewControllerBasedStatusBarAppearance</key>
-        <false/>
-        
-        
-        
+        <false />
+
+
+        <!-- Auth Config -->
         <key>CFBundleURLTypes</key>
         <array>
             <dict>
-               <key>CFBundleTypeRole</key>
-               <string>Editor</string>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
                 <key>CFBundleURLName</key>
                 <string>REVERSED_CLIENT_ID</string>
                 <key>CFBundleURLSchemes</key>
@@ -64,25 +64,31 @@
                     <string>fb672205383408645</string>
                 </array>
             </dict>
+            <dict>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>twitterkit-JKomrf1RtbGcHKxb4w6arj6mQ</string>
+                </array>
+            </dict>
         </array>
-        
-        
-        <!-- Google Sign-in Section -->
-        <!-- End of the Google Sign-in Section -->
-        
-        <!-- Facebook Sign-in Section -->
+
         <key>FacebookAppID</key>
         <string>672205383408645</string>
-        
+
         <key>FacebookDisplayName</key>
         <string>Auth</string>
+
         <key>LSApplicationQueriesSchemes</key>
         <array>
             <string>fbapi</string>
             <string>fb-messenger-share-api</string>
             <string>fbauth2</string>
             <string>fbshareextension</string>
+
+
+            <string>twitter</string>
+            <string>twitterauth</string>
         </array>
-        <!-- End of the Facebook Sign-in Section -->
+        <!-- Auth Config -->
     </dict>
 </plist>

@@ -39,7 +39,7 @@ class _DashboardState extends State<Dashboard> {
           SizedBox(height: 20),
           Text(
             (user != null)
-                ? "${user.displayName}\n${user.email}\n\n${user.uid}"
+                ? "${user.displayName ?? 'No User Name'}\n${user.email}\n\n${user.uid}"
                 : "",
             textAlign: TextAlign.center,
           ),

@@ -83,7 +83,7 @@ class _LoginOptionsState extends State<LoginOptions> {
           SizedBox(height: 20),
           AppleSignInButton(style: AppleButtonStyle.black),
           GoogleSignInButton(onPressed: () => loginWith(AuthType.google)),
-          TwitterSignInButton(),
+          TwitterSignInButton(onPressed: () => loginWith(AuthType.twitter)),
           FacebookSignInButton(onPressed: () => loginWith(AuthType.facebook)),
           FlatButton(
             onPressed: () => navigateToRegister(),
@@ -123,8 +123,11 @@ class _LoginOptionsState extends State<LoginOptions> {
         case AuthType.google:
           userCredential = await _auth.loginGoogle();
           break;
-
+        case AuthType.twitter:
+          userCredential = await _auth.loginTwitter();
+          break;
         default:
+          break;
       }
 
       pr.hide();
@@ -147,9 +150,13 @@ class _LoginOptionsState extends State<LoginOptions> {
       case "user-not-found":
         error = "Usuario no encontrado";
         break;
+      case "account-exists-with-different-credential":
+        error =
+            "La cuenta fue registrada con un metodo de autenticación distinto";
+        break;
       default:
         print(err);
     }
-    print(error);
+    errorDialog(context, error);
   }
 }
