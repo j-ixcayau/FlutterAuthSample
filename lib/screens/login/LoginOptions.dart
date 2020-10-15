@@ -16,6 +16,8 @@ class LoginOptions extends StatefulWidget {
 enum AuthType { email, apple, google, twitter, facebook }
 
 class _LoginOptionsState extends State<LoginOptions> {
+  ProgressDialog pr;
+
   Auth _auth = Auth();
 
   TextEditingController _userController;
@@ -33,6 +35,8 @@ class _LoginOptionsState extends State<LoginOptions> {
 
   @override
   Widget build(BuildContext context) {
+    pr = ProgressDialog(context);
+
     return Scaffold(
       body: BaseScroll(
         safeArea: false,
@@ -101,6 +105,7 @@ class _LoginOptionsState extends State<LoginOptions> {
   }
 
   loginWith(AuthType type) async {
+    pr.show();
     try {
       UserCredential userCredential;
 
@@ -122,13 +127,17 @@ class _LoginOptionsState extends State<LoginOptions> {
         default:
       }
 
+      pr.hide();
       if (userCredential != null) {
         Navigator.pushNamedAndRemoveUntil(
             context, "/dashboard", (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {
+      pr.hide();
+
       showUserError(e.code);
     }
+    pr.hide();
   }
 
   showUserError(String err) {
