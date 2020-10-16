@@ -1,9 +1,11 @@
+import 'package:auth/enums/AuthType.dart';
 import 'package:auth/services/Auth.dart';
 import 'package:auth/utils/colors.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
 import 'package:auth/widgets/CommonButton.dart';
 import 'package:auth/widgets/CommonInput.dart';
+import 'package:auth/widgets/SocialButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
@@ -12,8 +14,6 @@ class LoginOptions extends StatefulWidget {
   @override
   _LoginOptionsState createState() => _LoginOptionsState();
 }
-
-enum AuthType { email, apple, google, twitter, facebook }
 
 class _LoginOptionsState extends State<LoginOptions> {
   ProgressDialog pr;
@@ -81,10 +81,26 @@ class _LoginOptionsState extends State<LoginOptions> {
             callback: () => validateForm(),
           ),
           SizedBox(height: 20),
-          AppleSignInButton(style: AppleButtonStyle.black),
-          GoogleSignInButton(onPressed: () => loginWith(AuthType.google)),
-          TwitterSignInButton(onPressed: () => loginWith(AuthType.twitter)),
-          FacebookSignInButton(onPressed: () => loginWith(AuthType.facebook)),
+          SocialButton(
+            callback: () => loginWith(AuthType.apple),
+            type: AuthType.apple,
+          ),
+          SocialButton(
+            callback: () => loginWith(AuthType.google),
+            type: AuthType.google,
+          ),
+          SocialButton(
+            callback: () => loginWith(AuthType.twitter),
+            type: AuthType.twitter,
+          ),
+          SocialButton(
+            callback: () => loginWith(AuthType.facebook),
+            type: AuthType.facebook,
+          ),
+          SocialButton(
+            callback: () => loginWith(AuthType.github),
+            type: AuthType.github,
+          ),
           FlatButton(
             onPressed: () => navigateToRegister(),
             child: Text("Register", style: titleStyle),
@@ -126,6 +142,9 @@ class _LoginOptionsState extends State<LoginOptions> {
         case AuthType.twitter:
           userCredential = await _auth.loginTwitter();
           break;
+        case AuthType.github:
+          userCredential = await _auth.loginGithub(context);
+          break;
         default:
           break;
       }
@@ -138,6 +157,8 @@ class _LoginOptionsState extends State<LoginOptions> {
     } on FirebaseAuthException catch (e) {
       pr.hide();
 
+      print("AUTH ERROR ----- AUTH ERROR");
+      print(e);
       showUserError(e.code);
     }
     pr.hide();

@@ -60,7 +60,7 @@ class _CommonInputState extends State<CommonInput> {
       if (widget.isEmail) {
         bool emailValid = RegExp(
                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-            .hasMatch(text);
+            .hasMatch(text.trim());
         if (!emailValid) return "Check your email";
       }
     }

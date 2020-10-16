@@ -54,7 +54,7 @@ class _DashboardState extends State<Dashboard> {
 
   signOut() async {
     pr.show();
-    _auth.signOut().then((value) {
+    await _auth.signOut().then((value) {
       pr.hide();
 
       Navigator.pushNamedAndRemoveUntil(

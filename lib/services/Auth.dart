@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_twitter_login/flutter_twitter_login.dart';
+import 'package:github_sign_in/github_sign_in.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Auth {
@@ -26,8 +28,8 @@ class Auth {
     final FacebookLoginResult result = await FacebookLogin().logIn(['email']);
 
     if (result == null ||
-        result.accessToken == null ||
-        result.accessToken.token == null) return null;
+        result.status == FacebookLoginStatus.cancelledByUser ||
+        result.status == FacebookLoginStatus.error) return null;
 
     AuthCredential authCredential =
         FacebookAuthProvider.credential(result.accessToken.token);
@@ -38,61 +40,58 @@ class Auth {
   }
 
   Future<UserCredential> loginGoogle() async {
-    try {
-      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+    if (googleUser == null) return null;
 
-      final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      print(e);
-    }
-    return null;
+    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   Future<UserCredential> loginTwitter() async {
-    var twitterLogin = new TwitterLogin(
+    final TwitterLogin twitterLogin = new TwitterLogin(
       consumerKey: "JKomrf1RtbGcHKxb4w6arj6mQ",
       consumerSecret: "uooktNIjScTPDhOifO51yV2fqMFdda88l92aE3wYeycc3FHnu5",
     );
 
     final TwitterLoginResult result = await twitterLogin.authorize();
 
+    if (result == null ||
+        result.status == TwitterLoginStatus.cancelledByUser ||
+        result.status == TwitterLoginStatus.error) return null;
+
     final AuthCredential twitterAuthCredential = TwitterAuthProvider.credential(
         accessToken: result.session.token, secret: result.session.secret);
+
     return await FirebaseAuth.instance
         .signInWithCredential(twitterAuthCredential);
   }
 
-/*   Future<UserCredential> loginTwitter() async {
-    var uri = Uri.https(
-        "https://authsample-4fd39.firebaseapp.com/__/auth/handler", "");
-
-    var twitterLogin = TwitterLogin(
-      apiKey: "JKomrf1RtbGcHKxb4w6arj6mQ",
-      apiSecretKey: "uooktNIjScTPDhOifO51yV2fqMFdda88l92aE3wYeycc3FHnu5",
-      redirectURI: "https://authsample-4fd39.firebaseapp.com/__/auth/handler",
+  Future<UserCredential> loginGithub(BuildContext context) async {
+    final GitHubSignIn gitHubSignIn = GitHubSignIn(
+      clientId: "ef02311ad2c50fc4117b",
+      clientSecret: "989152ba1ebb5433e9cf971a1c58411ef2b2e26b",
+      redirectUrl: "https://authsample-4fd39.firebaseapp.com/__/auth/handler",
     );
 
-    final AuthResult authResult = await twitterLogin.login();
+    final GitHubSignInResult result = await gitHubSignIn.signIn(context);
 
-    if (authResult == null || authResult.status == TwitterLoginStatus.error)
-      return null;
+    if (result == null ||
+        result.status == GitHubSignInResultStatus.cancelled ||
+        result.status == GitHubSignInResultStatus.failed) return null;
 
-    final AuthCredential twitterAuthCredential = TwitterAuthProvider.credential(
-        accessToken: authResult.authToken, secret: authResult.authTokenSecret);
+    final AuthCredential githubCredential =
+        GithubAuthProvider.credential(result.token);
 
-    if (twitterAuthCredential == null) return null;
-
-    return await FirebaseAuth.instance
-        .signInWithCredential(twitterAuthCredential);
-  } */
+    return await FirebaseAuth.instance.signInWithCredential(githubCredential);
+  }
 
   Future<void> signOut() async {
     return await _firebaseAuth.signOut();
