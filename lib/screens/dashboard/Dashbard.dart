@@ -1,5 +1,5 @@
-import 'package:auth/localization/demoLocalization.dart';
-import 'package:auth/main.dart';
+import 'package:auth/localization/configLocalization.dart';
+import 'package:auth/localization/internationalization.dart';
 import 'package:auth/services/Auth.dart';
 import 'package:auth/utils/colors.dart';
 import 'package:auth/utils/utils.dart';
@@ -16,7 +16,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  ProgressDialog pr;
+  ProgressDialog _pr;
+  Internationalization _int;
 
   Auth _auth = Auth();
   User user;
@@ -25,7 +26,8 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    pr = ProgressDialog(context);
+    _pr = ProgressDialog(context);
+    _int = Internationalization(context);
 
     user = Provider.of<User>(context);
 
@@ -34,12 +36,13 @@ class _DashboardState extends State<Dashboard> {
       body: BaseScroll(
         children: [
           Text(
-            getString("home_page"),
+            _int.getString(homePageKey),
             style: TextStyle(
               color: primaryColor,
               fontWeight: FontWeight.bold,
               fontSize: 28,
             ),
+            textAlign: TextAlign.center,
           ),
           SizedBox(height: 50),
           (user != null && user.photoURL != null)
@@ -56,8 +59,9 @@ class _DashboardState extends State<Dashboard> {
                 : "",
             textAlign: TextAlign.center,
           ),
+          SizedBox(height: 40),
           CommonButton(
-            text: "SignOut",
+            text: _int.getString(logoutKey),
             callback: () => signOut(),
           ),
           SizedBox(height: 100),
@@ -67,16 +71,12 @@ class _DashboardState extends State<Dashboard> {
   }
 
   signOut() async {
-    pr.show();
+    _pr.show();
     await _auth.signOut().then((value) {
-      pr.hide();
+      _pr.hide();
 
       Navigator.pushNamedAndRemoveUntil(
-          context, "/loginOptions", (Route<dynamic> route) => false);
+          context, loginOptionsRoute, (Route<dynamic> route) => false);
     });
-  }
-
-  String getString(String key) {
-    return DemoLocalization.of(context).getTranslatedValue(key);
   }
 }

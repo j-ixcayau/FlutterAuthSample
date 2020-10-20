@@ -1,4 +1,14 @@
 {
-    "home_page": "Home Page",
-    "personal_info": "Personal Information"
+    "keyNotFound": "ALERT!!! Key wasn't found",
+    "email": "Email",
+    "password": "Password",
+    "continue": "Continue",
+    "login": "Signin",
+    "register": "Register",
+    "homePage": "Home Page",
+    "personalInfo": "Personal Information",
+    "emptyField": "Field can't be empty",
+    "validateEmail": "Check your email",
+    "logout": "SignOut",
+    "samples": "Samples"
 }

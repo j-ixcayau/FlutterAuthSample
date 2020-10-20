@@ -1,3 +1,4 @@
+import 'package:auth/localization/internationalization.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +22,12 @@ class CommonInput extends StatefulWidget {
 }
 
 class _CommonInputState extends State<CommonInput> {
+  Internationalization _int;
+
   @override
   Widget build(BuildContext context) {
+    _int = Internationalization(context);
+
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 4, 0, 4),
       child: TextFormField(
@@ -55,13 +60,13 @@ class _CommonInputState extends State<CommonInput> {
 
   validateField(String text) {
     if (text.trim().isEmpty) {
-      return "Field can't be empty";
+      return _int.getString(emptyFieldKey);
     } else {
       if (widget.isEmail) {
         bool emailValid = RegExp(
                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
             .hasMatch(text.trim());
-        if (!emailValid) return "Check your email";
+        if (!emailValid) return _int.getString(validateEmailKey);
       }
     }
     return null;

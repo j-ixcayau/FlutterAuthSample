@@ -1,4 +1,5 @@
 import 'package:auth/enums/AuthType.dart';
+import 'package:auth/localization/internationalization.dart';
 import 'package:auth/services/Auth.dart';
 import 'package:auth/utils/colors.dart';
 import 'package:auth/utils/utils.dart';
@@ -15,7 +16,8 @@ class LoginOptions extends StatefulWidget {
 }
 
 class _LoginOptionsState extends State<LoginOptions> {
-  ProgressDialog pr;
+  ProgressDialog _pr;
+  Internationalization _int;
 
   Auth _auth = Auth();
 
@@ -34,7 +36,8 @@ class _LoginOptionsState extends State<LoginOptions> {
 
   @override
   Widget build(BuildContext context) {
-    pr = ProgressDialog(context);
+    _pr = ProgressDialog(context);
+    _int = Internationalization(context);
 
     return Scaffold(
       body: BaseScroll(
@@ -59,12 +62,13 @@ class _LoginOptionsState extends State<LoginOptions> {
                     color: Colors.white,
                   ),
                   controller: _userController,
-                  hint: "Correo",
+                  // hint: "Correo",
+                  hint: _int.getString(emailKey),
                 ),
                 SizedBox(height: 10),
                 CommonInput(
                   controller: _passwordController,
-                  hint: "Password",
+                  hint: _int.getString(passwordKey),
                   obscureText: true,
                   prefixIcon: Icon(
                     Icons.lock,
@@ -76,7 +80,7 @@ class _LoginOptionsState extends State<LoginOptions> {
           ),
           SizedBox(height: 20),
           CommonButton(
-            text: "Continue",
+            text: _int.getString(continueKey),
             callback: () => validateForm(),
           ),
           SizedBox(height: 20),
@@ -102,7 +106,7 @@ class _LoginOptionsState extends State<LoginOptions> {
           ),
           FlatButton(
             onPressed: () => navigateToRegister(),
-            child: Text("Register", style: titleStyle),
+            child: Text(_int.getString(registerKey), style: titleStyle),
           ),
         ],
       ),
@@ -110,7 +114,7 @@ class _LoginOptionsState extends State<LoginOptions> {
   }
 
   navigateToRegister() {
-    Navigator.pushNamed(context, "/register");
+    Navigator.pushNamed(context, registerRoute);
   }
 
   validateForm() async {
@@ -120,7 +124,7 @@ class _LoginOptionsState extends State<LoginOptions> {
   }
 
   loginWith(AuthType type) async {
-    pr.show();
+    _pr.show();
     try {
       UserCredential userCredential;
 
@@ -148,19 +152,19 @@ class _LoginOptionsState extends State<LoginOptions> {
           break;
       }
 
-      pr.hide();
+      _pr.hide();
       if (userCredential != null) {
         Navigator.pushNamedAndRemoveUntil(
-            context, "/dashboard", (Route<dynamic> route) => false);
+            context, dashboardRoute, (Route<dynamic> route) => false);
       }
     } on FirebaseAuthException catch (e) {
-      pr.hide();
+      _pr.hide();
 
       print("AUTH ERROR ----- AUTH ERROR");
       print(e);
       showUserError(e.code);
     }
-    pr.hide();
+    _pr.hide();
   }
 
   showUserError(String err) {
@@ -173,6 +177,9 @@ class _LoginOptionsState extends State<LoginOptions> {
       case "account-exists-with-different-credential":
         error =
             "La cuenta fue registrada con un metodo de autenticación distinto";
+        break;
+      case "wrong-password":
+        error = "Contraseña incorrecta";
         break;
       default:
         print(err);

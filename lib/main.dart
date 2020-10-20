@@ -1,4 +1,4 @@
-import 'package:auth/localization/demoLocalization.dart';
+import 'package:auth/localization/configLocalization.dart';
 import 'package:auth/routes.dart';
 import 'package:auth/theme.dart';
 import 'package:auth/services/Auth.dart';
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
           Locale(SpanishLocale),
         ],
         localizationsDelegates: [
-          DemoLocalization.delegate,
+          ConfigLocalization.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,

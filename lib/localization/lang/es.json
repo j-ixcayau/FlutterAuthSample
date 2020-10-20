@@ -1,4 +1,14 @@
 {
-    "home_page": "Pagina principal",
-    "personal_info": "Información Personal"
+    "keyNotFound": "ALERTA!!! La llave no fue encontrada",
+    "email": "Correo",
+    "password": "Contraseña",
+    "continue": "Continuar",
+    "login": "Login",
+    "register": "Registrarse",
+    "homePage": "Pagina inicial",
+    "personalInfo": "Información Personal",
+    "emptyField": "El campo no puede estar vacio",
+    "validateEmail": "Verifica tu correo",
+    "logout": "Cerrar sesión",
+    "samples": "Ejemplos"
 }

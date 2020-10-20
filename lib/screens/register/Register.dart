@@ -1,3 +1,4 @@
+import 'package:auth/localization/internationalization.dart';
 import 'package:auth/services/Auth.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
@@ -13,6 +14,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   Auth _auth = Auth();
+  Internationalization _int;
 
   TextEditingController _userController;
   TextEditingController _passwordController;
@@ -29,6 +31,8 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    _int = Internationalization(context);
+
     return Scaffold(
       body: BaseScroll(
         safeArea: false,
@@ -52,12 +56,12 @@ class _RegisterState extends State<Register> {
                     color: Colors.white,
                   ),
                   controller: _userController,
-                  hint: "Correo",
+                  hint: _int.getString(emailKey),
                 ),
                 SizedBox(height: 10),
                 CommonInput(
                   controller: _passwordController,
-                  hint: "Password",
+                  hint: _int.getString(passwordKey),
                   obscureText: true,
                   prefixIcon: Icon(
                     Icons.lock,
@@ -68,7 +72,9 @@ class _RegisterState extends State<Register> {
             ),
           ),
           SizedBox(height: 20),
-          CommonButton(text: "Continue", callback: () => validateForm()),
+          CommonButton(
+              text: _int.getString(continueKey),
+              callback: () => validateForm()),
           SizedBox(height: 20),
         ],
       ),
@@ -85,7 +91,7 @@ class _RegisterState extends State<Register> {
             await _auth.createUserWithEmailAndPassword(email, password);
         if (userCredential != null) {
           Navigator.pushNamedAndRemoveUntil(
-              context, "/dashboard", (Route<dynamic> route) => false);
+              context, dashboardRoute, (Route<dynamic> route) => false);
         }
       } on FirebaseAuthException catch (e) {
         showUserError(e.code);

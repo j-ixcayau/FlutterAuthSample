@@ -1,4 +1,6 @@
 import 'package:auth/enums/AuthType.dart';
+import 'package:auth/localization/internationalization.dart';
+import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SocialButton extends StatefulWidget {
@@ -12,6 +14,8 @@ class SocialButton extends StatefulWidget {
 }
 
 class _SocialButtonState extends State<SocialButton> {
+  Internationalization _int;
+
   TextStyle textStyle;
   Color background;
 
@@ -61,6 +65,8 @@ class _SocialButtonState extends State<SocialButton> {
 
   @override
   Widget build(BuildContext context) {
+    _int = Internationalization(context);
+
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 2),
@@ -78,7 +84,7 @@ class _SocialButtonState extends State<SocialButton> {
             ),
             SizedBox(width: 10),
             Text(
-              "$text Signin",
+              "$text ${_int.getString(loginKey)}",
               style: textStyle,
             ),
           ],
