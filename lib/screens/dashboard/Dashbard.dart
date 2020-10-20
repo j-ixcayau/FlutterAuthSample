@@ -1,3 +1,5 @@
+import 'package:auth/localization/demoLocalization.dart';
+import 'package:auth/main.dart';
 import 'package:auth/services/Auth.dart';
 import 'package:auth/utils/colors.dart';
 import 'package:auth/utils/utils.dart';
@@ -19,6 +21,8 @@ class _DashboardState extends State<Dashboard> {
   Auth _auth = Auth();
   User user;
 
+  bool currentLanguage = false;
+
   @override
   Widget build(BuildContext context) {
     pr = ProgressDialog(context);
@@ -26,9 +30,18 @@ class _DashboardState extends State<Dashboard> {
     user = Provider.of<User>(context);
 
     return Scaffold(
-      appBar: CommonAppbar(),
+      appBar: CommonAppbar(showLanguage: true),
       body: BaseScroll(
         children: [
+          Text(
+            getString("home_page"),
+            style: TextStyle(
+              color: primaryColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 28,
+            ),
+          ),
+          SizedBox(height: 50),
           (user != null && user.photoURL != null)
               ? Image.network(user.photoURL)
               : Icon(
@@ -47,6 +60,7 @@ class _DashboardState extends State<Dashboard> {
             text: "SignOut",
             callback: () => signOut(),
           ),
+          SizedBox(height: 100),
         ],
       ),
     );
@@ -60,5 +74,9 @@ class _DashboardState extends State<Dashboard> {
       Navigator.pushNamedAndRemoveUntil(
           context, "/loginOptions", (Route<dynamic> route) => false);
     });
+  }
+
+  String getString(String key) {
+    return DemoLocalization.of(context).getTranslatedValue(key);
   }
 }
