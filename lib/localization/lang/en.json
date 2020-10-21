@@ -10,5 +10,10 @@
     "emptyField": "Field can't be empty",
     "validateEmail": "Check your email",
     "logout": "SignOut",
-    "samples": "Samples"
+    "samples": "Samples",
+    "userNotFound": "User not found",
+    "registeredDifferentMethod": "The account was registered with a different authentication method",
+    "wrongPassword": "Wrong password",
+    "cancel": "Cancel",
+    "accept": "Accept"
 }

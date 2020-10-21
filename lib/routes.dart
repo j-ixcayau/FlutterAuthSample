@@ -13,8 +13,6 @@ class Routes {
             ? LoginOptions()
             : Dashboard();
       },
-      // "/errorPage": (context) => ErrorPage(),
-      // "/loadPage": (context) => LoadPage(),
       loginOptionsRoute: (context) => LoginOptions(),
       registerRoute: (context) => Register(),
       dashboardRoute: (context) => Dashboard(),

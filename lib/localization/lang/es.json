@@ -10,5 +10,10 @@
     "emptyField": "El campo no puede estar vacio",
     "validateEmail": "Verifica tu correo",
     "logout": "Cerrar sesión",
-    "samples": "Ejemplos"
+    "samples": "Ejemplos",
+    "userNotFound": "Usuario no encontrado",
+    "registeredDifferentMethod": "La cuenta fue registrada con un metodo de autenticación distinto",
+    "wrongPassword": "Contraseña incorrecta",
+    "cancel": "Cancelar",
+    "accept": "Aceptar"
 }

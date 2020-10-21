@@ -6,6 +6,7 @@ class CustomTheme {
     return ThemeData(
       primarySwatch: Colors.blue,
       primaryColor: primaryColor,
+      accentColor: accentColor,
       visualDensity: VisualDensity.adaptivePlatformDensity,
     );
   }

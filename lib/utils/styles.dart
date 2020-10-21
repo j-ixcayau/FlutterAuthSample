@@ -5,7 +5,10 @@ const TextStyle inputStyle = TextStyle(
   color: Colors.white,
 );
 
-const TextStyle titleStyle = TextStyle(color: Colors.white, fontSize: 18);
+const TextStyle titleStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 18,
+);
 
 const TextStyle textStyle = TextStyle(
   color: Colors.white,

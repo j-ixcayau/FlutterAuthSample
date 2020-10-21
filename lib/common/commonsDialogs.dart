@@ -1,4 +1,6 @@
+import 'package:auth/localization/internationalization.dart';
 import 'package:auth/utils/colors.dart';
+import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 errorDialog(BuildContext context, String msg) {
@@ -18,7 +20,7 @@ errorDialog(BuildContext context, String msg) {
               Navigator.pop(context);
             },
             child: Text(
-              "Aceptar",
+              Internationalization(context).getString(acceptKey),
               style: TextStyle(
                 color: primaryColor,
               ),

@@ -1,3 +1,4 @@
+import 'package:auth/common/commonsDialogs.dart';
 import 'package:auth/enums/AuthType.dart';
 import 'package:auth/localization/internationalization.dart';
 import 'package:auth/services/Auth.dart';
@@ -172,14 +173,13 @@ class _LoginOptionsState extends State<LoginOptions> {
 
     switch (err) {
       case "user-not-found":
-        error = "Usuario no encontrado";
+        error = _int.getString(userNotFoundKey);
         break;
       case "account-exists-with-different-credential":
-        error =
-            "La cuenta fue registrada con un metodo de autenticación distinto";
+        error = _int.getString(registeredDifferentMethodKey);
         break;
       case "wrong-password":
-        error = "Contraseña incorrecta";
+        error = _int.getString(wrongPasswordKey);
         break;
       default:
         print(err);

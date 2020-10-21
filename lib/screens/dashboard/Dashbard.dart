@@ -1,4 +1,3 @@
-import 'package:auth/localization/configLocalization.dart';
 import 'package:auth/localization/internationalization.dart';
 import 'package:auth/services/Auth.dart';
 import 'package:auth/utils/colors.dart';
