@@ -42,8 +42,9 @@ dependencies:
     git: git://github.com/vudvhitech/flutter_twitter_login.git
   github_sign_in: ^0.0.1
 
-  provider: ^4.3.2+2
-  
+  provider: ^4.3.2+2 # Pattern
+  sailor: ^0.7.1 # Routes and guard
+
   shared_preferences: ^0.5.12+2
 
 dev_dependencies:

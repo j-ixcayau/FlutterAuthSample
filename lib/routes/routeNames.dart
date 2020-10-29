@@ -1,0 +1,30 @@
+import 'package:auth/model/route.dart';
+import 'package:auth/routes/routes.dart';
+import 'package:auth/screens/dashboard/Dashbard.dart';
+import 'package:auth/screens/login/LoginOptions.dart';
+import 'package:auth/screens/register/Register.dart';
+import 'package:sailor/sailor.dart';
+
+const String initialRoute = "/";
+const String loginOptionsRoute = "/loginOptions";
+const String registerRoute = "/register";
+const String dashboardRoute = "/dashboard";
+
+List<Route> listRoutes = [
+  Route(loginOptionsRoute, LoginOptions()),
+  Route(registerRoute, Register()),
+  Route(dashboardRoute, Dashboard()),
+];
+
+navigateToPage(String route, {back = true}) {
+  if (back) {
+    Routes.sailor(route);
+  } else {
+    Routes.sailor
+        .navigate(route, navigationType: NavigationType.pushAndRemoveUntil);
+  }
+}
+
+popPage() {
+  Routes.sailor.pop();
+}

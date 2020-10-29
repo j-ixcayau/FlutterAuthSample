@@ -31,3 +31,25 @@ errorDialog(BuildContext context, String msg) {
     },
   );
 }
+
+Future<bool> showExitApp(BuildContext context) async {
+  Internationalization _int = Internationalization(context);
+
+  return await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(_int.getString(areYouSureKey)),
+      content: Text(_int.getString(exitAppKey)),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(_int.getString(cancelKey)),
+        ),
+        FlatButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(_int.getString(continueKey)),
+        ),
+      ],
+    ),
+  );
+}

@@ -1,4 +1,4 @@
-import 'package:auth/main.dart';
+import 'package:auth/app.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

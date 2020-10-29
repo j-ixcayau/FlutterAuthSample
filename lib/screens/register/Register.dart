@@ -1,5 +1,6 @@
-import 'package:auth/common/commonsDialogs.dart';
+import 'package:auth/common/dialogs/commonsDialogs.dart';
 import 'package:auth/localization/internationalization.dart';
+import 'package:auth/routes/routeNames.dart';
 import 'package:auth/services/Auth.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
@@ -91,8 +92,7 @@ class _RegisterState extends State<Register> {
         final UserCredential userCredential =
             await _auth.createUserWithEmailAndPassword(email, password);
         if (userCredential != null) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, dashboardRoute, (Route<dynamic> route) => false);
+          navigateToPage(dashboardRoute, back: false);
         }
       } on FirebaseAuthException catch (e) {
         showUserError(e.code);

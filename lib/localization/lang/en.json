@@ -15,5 +15,7 @@
     "registeredDifferentMethod": "The account was registered with a different authentication method",
     "wrongPassword": "Wrong password",
     "cancel": "Cancel",
-    "accept": "Accept"
+    "accept": "Accept",
+    "areYouSure": "Are you sure?",
+    "exitApp": "Do you want to exit from App"
 }

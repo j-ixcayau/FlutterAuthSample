@@ -22,3 +22,5 @@ const String registeredDifferentMethodKey = "registeredDifferentMethod";
 const String wrongPasswordKey = "wrongPassword";
 const String cancelKey = "cancel";
 const String acceptKey = "accept";
+const String areYouSureKey = "areYouSure";
+const String exitAppKey = "exitApp";
