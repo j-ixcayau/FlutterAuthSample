@@ -8,6 +8,14 @@ Color errorColor = errorLigthColor;
 Color reverseTextcolor = textDarkColor;
 Color reversePrimaryColor = primaryDarkColor;
 
+const twitterColor = Color(0xff00acee);
+const facebookColor = Color(0xff3b5998);
+const githubColor = Color(0xff24292f);
+const googleColor = Color(0xff4285F4);
+
+const whiteColor = Colors.white;
+const blackColor = Colors.black;
+
 // Ligth Color
 const primaryLightColor = Color(0xffe4f1fa);
 const accentLightColor = Color(0xffc7d7e3);

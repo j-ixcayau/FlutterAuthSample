@@ -107,13 +107,13 @@ class _LoginOptionsState extends State<LoginOptions> {
               callback: () => loginWith(AuthType.github),
               type: AuthType.github,
             ),
-            FlatButton(
-              onPressed: () => navigateToRegister(),
-              child: Text(_int.getString(registerKey), style: subtitleStyle),
+            CommonButton(
+              callback: () => navigateToRegister(),
+              text: _int.getString(registerKey),
             ),
-            FlatButton(
-              onPressed: () => navigateToPage(configRoute),
-              child: Text(_int.getString("Config"), style: subtitleStyle),
+            CommonButton(
+              callback: () => navigateToPage(configRoute),
+              text: _int.getString("Config"),
             ),
           ],
         ),

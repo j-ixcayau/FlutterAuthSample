@@ -28,39 +28,35 @@ class _SocialButtonState extends State<SocialButton> {
 
     switch (widget.type) {
       case AuthType.apple:
-        textStyle = TextStyle(color: Colors.black);
-        background = Colors.white;
-        image = "apple";
+        textStyle = TextStyle(color: whiteColor);
+        background = blackColor;
         text = "Apple";
         break;
       case AuthType.google:
         textStyle = TextStyle(color: Colors.black);
-        background = Colors.white;
-        image = "google";
+        background = googleColor;
         text = "Google";
         break;
         break;
       case AuthType.twitter:
         textStyle = TextStyle(color: Colors.black);
-        background = Colors.white;
-        image = "twitter";
+        background = twitterColor;
         text = "Twitter";
         break;
       case AuthType.facebook:
         textStyle = TextStyle(color: Colors.white);
-        background = Color(0xff3b5998);
-        image = "facebook";
+        background = facebookColor;
         text = "Facebook";
         break;
       case AuthType.github:
         textStyle = TextStyle(color: Colors.white);
-        background = Color(0xff24292f);
-        image = "github";
+        background = githubColor;
         text = "Github";
         break;
       default:
         break;
     }
+    image = text.trim().toLowerCase();
   }
 
   @override

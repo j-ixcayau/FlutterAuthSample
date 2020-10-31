@@ -100,7 +100,10 @@ class _MyAppState extends State<MyApp> {
       setState(() {});
     });
 
-    final bool themeSaved = prefs.getBool(ThemeSaved);
+    bool themeSaved = prefs.getBool(ThemeSaved);
+    if (themeSaved == null) {
+      themeSaved = _themeProvider.getCurrentMode == ThemeMode.dark;
+    }
     updateTheme(themeSaved ? ThemeMode.dark : ThemeMode.light);
   }
 
