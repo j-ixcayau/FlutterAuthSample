@@ -1,5 +1,4 @@
 import 'package:auth/localization/internationalization.dart';
-import 'package:auth/utils/colors.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +20,7 @@ errorDialog(BuildContext context, String msg) {
             },
             child: Text(
               Internationalization(context).getString(acceptKey),
-              style: TextStyle(
-                color: primaryColor,
-              ),
+              style: textStyle,
             ),
           )
         ],
@@ -38,16 +35,28 @@ Future<bool> showExitApp(BuildContext context) async {
   return await showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text(_int.getString(areYouSureKey)),
-      content: Text(_int.getString(exitAppKey)),
+      title: Text(
+        _int.getString(areYouSureKey),
+        style: textStyle,
+      ),
+      content: Text(
+        _int.getString(exitAppKey),
+        style: textStyle,
+      ),
       actions: <Widget>[
         FlatButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text(_int.getString(cancelKey)),
+          child: Text(
+            _int.getString(cancelKey),
+            style: textStyle,
+          ),
         ),
         FlatButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text(_int.getString(continueKey)),
+          child: Text(
+            _int.getString(continueKey),
+            style: textStyle,
+          ),
         ),
       ],
     ),

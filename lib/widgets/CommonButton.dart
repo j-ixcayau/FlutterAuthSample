@@ -24,10 +24,7 @@ class CommonButtonState extends State<CommonButton> {
         color: accentColor,
         child: Text(
           widget.text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-          ),
+          style: subtitleStyle,
         ),
         onPressed: widget.callback,
       ),

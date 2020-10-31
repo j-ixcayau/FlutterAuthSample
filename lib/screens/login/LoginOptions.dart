@@ -63,7 +63,7 @@ class _LoginOptionsState extends State<LoginOptions> {
                     isEmail: true,
                     prefixIcon: Icon(
                       Icons.person,
-                      color: Colors.white,
+                      color: textColor,
                     ),
                     controller: _userController,
                     // hint: "Correo",
@@ -76,7 +76,7 @@ class _LoginOptionsState extends State<LoginOptions> {
                     obscureText: true,
                     prefixIcon: Icon(
                       Icons.lock,
-                      color: Colors.white,
+                      color: textColor,
                     ),
                   ),
                 ],
@@ -87,7 +87,6 @@ class _LoginOptionsState extends State<LoginOptions> {
               text: _int.getString(continueKey),
               callback: () => validateForm(),
             ),
-            SizedBox(height: 20),
             SocialButton(
               callback: () => loginWith(AuthType.apple),
               type: AuthType.apple,
@@ -110,7 +109,11 @@ class _LoginOptionsState extends State<LoginOptions> {
             ),
             FlatButton(
               onPressed: () => navigateToRegister(),
-              child: Text(_int.getString(registerKey), style: titleStyle),
+              child: Text(_int.getString(registerKey), style: subtitleStyle),
+            ),
+            FlatButton(
+              onPressed: () => navigateToPage(configRoute),
+              child: Text(_int.getString("Config"), style: subtitleStyle),
             ),
           ],
         ),

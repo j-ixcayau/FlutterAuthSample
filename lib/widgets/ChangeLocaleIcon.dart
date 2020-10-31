@@ -32,14 +32,14 @@ class _ChangeLocaleIconState extends State<ChangeLocaleIcon> {
           (String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value),
+              child: Text(value, style: textStyle),
             );
           },
         ).toList(),
         onChanged: (String value) => updateLanguage(value),
         icon: Icon(
           Icons.language,
-          color: Colors.white,
+          color: reversePrimaryColor,
         ),
         underline: SizedBox(),
       ),

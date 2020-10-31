@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class CommonAppbar extends StatefulWidget implements PreferredSizeWidget {
   final bool showLanguage;
+  final Widget trailing;
 
-  CommonAppbar({this.showLanguage = false});
+  CommonAppbar({this.showLanguage = false, this.trailing});
 
   @override
   _CommonAppbarState createState() => _CommonAppbarState();
@@ -24,10 +25,14 @@ class _CommonAppbarState extends State<CommonAppbar> {
 
     return AppBar(
       backgroundColor: primaryColor,
-      title: Text(_int.getString(samplesKey)),
+      title: Text(
+        _int.getString(samplesKey),
+        style: reverseStyle,
+      ),
       centerTitle: true,
       actions: [
         (widget.showLanguage) ? ChangeLocaleIcon() : SizedBox(),
+        (widget.trailing != null) ? widget.trailing : SizedBox()
       ],
     );
   }

@@ -1,7 +1,6 @@
 import 'package:auth/localization/internationalization.dart';
 import 'package:auth/routes/routeNames.dart';
 import 'package:auth/services/Auth.dart';
-import 'package:auth/utils/colors.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
 import 'package:auth/widgets/CommonAppbar.dart';
@@ -34,16 +33,16 @@ class _DashboardState extends State<Dashboard> {
 
     return OnCloseApp(
       child: Scaffold(
-        appBar: CommonAppbar(showLanguage: true),
+        appBar: CommonAppbar(
+          trailing: IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () => navigateToPage(configRoute)),
+        ),
         body: BaseScroll(
           children: [
             Text(
               _int.getString(homePageKey),
-              style: TextStyle(
-                color: primaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 28,
-              ),
+              style: titleStyle,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 50),
@@ -59,6 +58,7 @@ class _DashboardState extends State<Dashboard> {
               (user != null)
                   ? "${user.displayName ?? 'No User Name'}\n${user.email}\n\n${user.uid}"
                   : "",
+              style: textStyle,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 40),

@@ -2,6 +2,7 @@ const String EnglishLocale = "en";
 const String SpanishLocale = "es";
 
 const String LocationSaved = "locationSaved"; // sharedPreferences
+const String ThemeSaved = "themeSaved"; // sharedPreferences // true is darkness
 
 /// Locale keys
 

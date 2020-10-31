@@ -38,20 +38,20 @@ class _CommonInputState extends State<CommonInput> {
           hintText: widget.hint,
           prefixIcon: widget.prefixIcon,
           hintStyle: TextStyle(
-            color: Colors.white54,
+            color: textColor,
           ),
 
           /// Input Borders
           enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(color: textColor),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(color: textColor),
           ),
           border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(color: textColor),
           ),
-          errorStyle: TextStyle(color: Colors.red),
+          errorStyle: TextStyle(color: errorColor),
         ),
         validator: (String text) => validateField(text),
       ),

@@ -1,15 +1,26 @@
+import 'package:auth/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-const TextStyle inputStyle = TextStyle(
-  decorationColor: Colors.white,
-  color: Colors.white,
+TextStyle inputStyle = TextStyle(
+  decorationColor: Colors.transparent,
+  color: textColor,
 );
 
-const TextStyle titleStyle = TextStyle(
-  color: Colors.white,
+TextStyle titleStyle = TextStyle(
+  color: textColor,
+  fontSize: 28,
+  fontWeight: FontWeight.bold,
+);
+
+TextStyle subtitleStyle = TextStyle(
+  color: textColor,
   fontSize: 18,
 );
 
-const TextStyle textStyle = TextStyle(
-  color: Colors.white,
+TextStyle textStyle = TextStyle(
+  color: textColor,
+);
+
+TextStyle reverseStyle = textStyle.copyWith(
+  color: reverseTextcolor,
 );
