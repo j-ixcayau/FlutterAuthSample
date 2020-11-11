@@ -43,8 +43,8 @@
         </array>
         <key>UIViewControllerBasedStatusBarAppearance</key>
         <false />
-
-
+        
+        
         <!-- Auth Config -->
         <key>CFBundleURLTypes</key>
         <array>
@@ -71,24 +71,49 @@
                 </array>
             </dict>
         </array>
-
+        
         <key>FacebookAppID</key>
         <string>672205383408645</string>
-
+        
         <key>FacebookDisplayName</key>
         <string>Auth</string>
-
+        
         <key>LSApplicationQueriesSchemes</key>
         <array>
             <string>fbapi</string>
             <string>fb-messenger-share-api</string>
             <string>fbauth2</string>
             <string>fbshareextension</string>
-
-
+            
+            
             <string>twitter</string>
             <string>twitterauth</string>
         </array>
         <!-- Auth Config -->
+        
+        <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSAllowsArbitraryLoads</key>
+            <true />
+            <key>NSAllowsArbitraryLoadsInWebContent</key>
+            <true />
+        </dict>
+        
+        <!--     Locatio   -->
+        <key>NSLocationWhenInUseUsageDescription</key>
+        <string>This app needs access to location when open.</string>
+        
+        <key>NSLocationAlwaysUsageDescription</key>
+        <string>This app needs access to location when in the background.</string>
+        
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>This app needs access to location when open and in the background.</string>
+        
+        <key>NSLocationWhereInUseUsageDescription</key>
+        <string>This app needs access to show home location.</string>
+        
+        <!--    Maps    -->
+        <key>io.flutter.embedded_views_preview</key>
+        <true/>
     </dict>
 </plist>

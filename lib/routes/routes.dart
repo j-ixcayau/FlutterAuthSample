@@ -1,5 +1,5 @@
 import 'package:auth/routes/routeNames.dart';
-import 'package:auth/screens/dashboard/Dashbard.dart';
+import 'package:auth/screens/dashboard/Dashboard.dart';
 import 'package:auth/screens/login/LoginOptions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';

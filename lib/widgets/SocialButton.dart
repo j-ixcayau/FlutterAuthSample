@@ -1,3 +1,4 @@
+import 'package:auth/common/dialogs/commonsDialogs.dart';
 import 'package:auth/enums/AuthType.dart';
 import 'package:auth/localization/internationalization.dart';
 import 'package:auth/utils/utils.dart';
@@ -7,7 +8,7 @@ class SocialButton extends StatefulWidget {
   final Function callback;
   final AuthType type;
 
-  SocialButton({this.callback, @required this.type});
+  SocialButton({@required this.callback, @required this.type});
 
   @override
   _SocialButtonState createState() => _SocialButtonState();
@@ -67,7 +68,8 @@ class _SocialButtonState extends State<SocialButton> {
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 2),
       child: FlatButton(
-        onPressed: widget.callback,
+        onPressed:
+            widget.callback != null ? widget.callback : () => showAlert(),
         color: background,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -87,5 +89,10 @@ class _SocialButtonState extends State<SocialButton> {
         ),
       ),
     );
+  }
+
+  void showAlert() {
+    commonOkDialog(context,
+        Internationalization(context).getString(optionNotAvailableKey));
   }
 }

@@ -8,13 +8,18 @@ class CommonInput extends StatefulWidget {
   final bool obscureText;
   final Widget prefixIcon;
   final bool isEmail;
+  final bool isDark;
+  final Function onTap;
 
+// IsDark is true required in non white page
   CommonInput({
     this.controller,
     this.hint = "",
     this.obscureText = false,
     this.prefixIcon,
     this.isEmail = false,
+    this.isDark = false,
+    this.onTap,
   });
 
   @override
@@ -25,40 +30,81 @@ class _CommonInputState extends State<CommonInput> {
   Internationalization _int;
 
   @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, () => initWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     _int = Internationalization(context);
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-      child: TextFormField(
-        controller: widget.controller,
-        style: inputStyle,
-        obscureText: widget.obscureText,
-        decoration: InputDecoration(
-          hintText: widget.hint,
-          prefixIcon: widget.prefixIcon,
-          hintStyle: TextStyle(
-            color: textColor,
-          ),
+    final Color primary = Theme.of(context).primaryColor;
 
-          /// Input Borders
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: textColor),
+    return Theme(
+      data: (!widget.isDark)
+          ? Theme.of(context)
+          : Theme.of(context).copyWith(
+              primaryColor: Colors.white,
+              inputDecorationTheme: InputDecorationTheme(
+                fillColor: whiteColor,
+                focusColor: whiteColor,
+                hoverColor: whiteColor,
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: whiteColor),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: whiteColor),
+                ),
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide(color: whiteColor),
+                ),
+                disabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: whiteColor.withOpacity(0.5)),
+                ),
+              ),
+            ),
+      child: InkWell(
+        onTap: widget.onTap,
+        child: IgnorePointer(
+          ignoring: widget.onTap != null,
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+            child: TextFormField(
+              cursorColor: (!widget.isDark) ? primary : whiteColor,
+              controller: widget.controller,
+              obscureText: widget.obscureText,
+              style: (!widget.isDark)
+                  ? Theme.of(context).textTheme.bodyText1
+                  : Theme.of(context).textTheme.bodyText2,
+              decoration: InputDecoration(
+                labelText: widget.hint,
+                labelStyle: Theme.of(context).textTheme.bodyText1.copyWith(
+                      color: (!widget.isDark)
+                          ? primary.withOpacity(0.8)
+                          : whiteColor.withOpacity(0.8),
+                    ),
+                prefixIcon: widget.prefixIcon,
+                hintStyle: Theme.of(context).textTheme.bodyText1.copyWith(
+                      color: (!widget.isDark)
+                          ? primary.withOpacity(0.5)
+                          : whiteColor.withOpacity(0.5),
+                    ),
+              ),
+              validator: (String text) => validateField(text),
+            ),
           ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: textColor),
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: textColor),
-          ),
-          errorStyle: TextStyle(color: errorColor),
         ),
-        validator: (String text) => validateField(text),
       ),
     );
   }
 
-  validateField(String text) {
+  void initWidget() {
+    setState(() {});
+  }
+
+  String validateField(String text) {
     if (text.trim().isEmpty) {
       return _int.getString(emptyFieldKey);
     } else {

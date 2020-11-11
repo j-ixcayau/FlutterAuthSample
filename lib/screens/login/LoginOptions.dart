@@ -1,17 +1,20 @@
 import 'package:auth/common/dialogs/commonsDialogs.dart';
 import 'package:auth/enums/AuthType.dart';
 import 'package:auth/localization/internationalization.dart';
+import 'package:auth/provider/User/UserProvider.dart';
 import 'package:auth/routes/routeNames.dart';
-import 'package:auth/services/Auth.dart';
-import 'package:auth/utils/colors.dart';
+import 'package:auth/services/Auth/Auth.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
 import 'package:auth/widgets/CommonButton.dart';
+import 'package:auth/widgets/CommonIcon.dart';
 import 'package:auth/widgets/CommonInput.dart';
 import 'package:auth/widgets/OnCloseApp.dart';
 import 'package:auth/widgets/SocialButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:auth/model/user/user.dart' as usr;
 
 class LoginOptions extends StatefulWidget {
   @override
@@ -21,6 +24,9 @@ class LoginOptions extends StatefulWidget {
 class _LoginOptionsState extends State<LoginOptions> {
   ProgressDialog _pr;
   Internationalization _int;
+
+  // Provider
+  UserProvider _userProvider;
 
   Auth _auth = Auth();
 
@@ -42,11 +48,13 @@ class _LoginOptionsState extends State<LoginOptions> {
     _pr = ProgressDialog(context);
     _int = Internationalization(context);
 
+    _userProvider = Provider.of<UserProvider>(context);
+
     return OnCloseApp(
       child: Scaffold(
         body: BaseScroll(
           safeArea: false,
-          backgroundColor: primaryColor,
+          backgroundColor: Theme.of(context).primaryColor,
           children: [
             Image.asset(
               "assets/logo.png",
@@ -61,23 +69,18 @@ class _LoginOptionsState extends State<LoginOptions> {
                 children: [
                   CommonInput(
                     isEmail: true,
-                    prefixIcon: Icon(
-                      Icons.person,
-                      color: textColor,
-                    ),
                     controller: _userController,
-                    // hint: "Correo",
+                    prefixIcon: CommonIcon(Icons.person, isWhite: true),
                     hint: _int.getString(emailKey),
+                    isDark: true,
                   ),
                   SizedBox(height: 10),
                   CommonInput(
                     controller: _passwordController,
                     hint: _int.getString(passwordKey),
                     obscureText: true,
-                    prefixIcon: Icon(
-                      Icons.lock,
-                      color: textColor,
-                    ),
+                    prefixIcon: CommonIcon(Icons.lock, isWhite: true),
+                    isDark: true,
                   ),
                 ],
               ),
@@ -88,7 +91,7 @@ class _LoginOptionsState extends State<LoginOptions> {
               callback: () => validateForm(),
             ),
             SocialButton(
-              callback: () => loginWith(AuthType.apple),
+              callback: null,
               type: AuthType.apple,
             ),
             SocialButton(
@@ -111,6 +114,7 @@ class _LoginOptionsState extends State<LoginOptions> {
               callback: () => navigateToRegister(),
               text: _int.getString(registerKey),
             ),
+            SizedBox(height: 10),
             CommonButton(
               callback: () => navigateToPage(configRoute),
               text: _int.getString("Config"),
@@ -160,10 +164,7 @@ class _LoginOptionsState extends State<LoginOptions> {
           break;
       }
 
-      _pr.hide();
-      if (userCredential != null) {
-        navigateToPage(dashboardRoute, back: false);
-      }
+      if (userCredential != null) getUserInfo(userCredential);
     } on FirebaseAuthException catch (e) {
       _pr.hide();
 
@@ -171,7 +172,45 @@ class _LoginOptionsState extends State<LoginOptions> {
       print(e);
       showUserError(e.code);
     }
+  }
+
+  void getUserInfo(UserCredential credential) async {
+    final usr.User user = await _userProvider
+        .requestUser(credential.user.uid)
+        .catchError((error) {
+      print(error);
+    });
+
+    if (user != null) {
+      _userProvider.setUser = user;
+      navigateToDashboard();
+    } else {
+      registerUser(credential);
+    }
+  }
+
+  void registerUser(UserCredential credential) async {
+    usr.User user = usr.User(
+      id: credential.user.uid,
+      name: credential.user.displayName,
+      email: credential.user.email,
+      profilePicture: credential.user.photoURL,
+    );
+
+    await _userProvider.createUser(user).then((value) async {
+      user = await _userProvider.requestUser(credential.user.uid);
+      _userProvider.setUser = user;
+
+      navigateToDashboard();
+    }).catchError((error) {
+      _pr.hide();
+      commonOkDialog(context, error);
+    });
+  }
+
+  void navigateToDashboard() {
     _pr.hide();
+    navigateToPage(dashboardRoute, back: false);
   }
 
   void showUserError(String err) {
@@ -190,6 +229,6 @@ class _LoginOptionsState extends State<LoginOptions> {
       default:
         print(err);
     }
-    errorDialog(context, error);
+    commonOkDialog(context, error);
   }
 }

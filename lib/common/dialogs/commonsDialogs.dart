@@ -2,25 +2,38 @@ import 'package:auth/localization/internationalization.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-errorDialog(BuildContext context, String msg) {
+commonOkDialog(BuildContext context, String msg,
+    {bool cancel = true, Function function}) {
   showDialog(
     context: context,
-    barrierDismissible: false,
+    barrierDismissible: cancel,
     builder: (BuildContext ct) {
       return AlertDialog(
-        backgroundColor: Colors.white,
         content: Text(
           msg,
           textAlign: TextAlign.center,
+          // style: Theme.of(context).textTheme.bodyText2,
         ),
         actions: [
+          (!cancel && function != null)
+              ? FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    Internationalization(context).getString(cancelKey),
+                    // style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                )
+              : SizedBox(),
           FlatButton(
             onPressed: () {
               Navigator.pop(context);
+              if (function != null) function();
             },
             child: Text(
               Internationalization(context).getString(acceptKey),
-              style: textStyle,
+              // style: Theme.of(context).textTheme.bodyText2,
             ),
           )
         ],
@@ -37,25 +50,25 @@ Future<bool> showExitApp(BuildContext context) async {
     builder: (context) => AlertDialog(
       title: Text(
         _int.getString(areYouSureKey),
-        style: textStyle,
+        // style: textLigthStyle,
       ),
       content: Text(
         _int.getString(exitAppKey),
-        style: textStyle,
+        // style: textLigthStyle,
       ),
       actions: <Widget>[
         FlatButton(
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(
             _int.getString(cancelKey),
-            style: textStyle,
+            // style: textLigthStyle,
           ),
         ),
         FlatButton(
           onPressed: () => Navigator.of(context).pop(true),
           child: Text(
             _int.getString(continueKey),
-            style: textStyle,
+            // style: textLigthStyle,
           ),
         ),
       ],

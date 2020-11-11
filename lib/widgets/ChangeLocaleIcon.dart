@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:auth/app.dart';
+import 'package:auth/localization/internationalization.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,44 +12,75 @@ class ChangeLocaleIcon extends StatefulWidget {
 }
 
 class _ChangeLocaleIconState extends State<ChangeLocaleIcon> {
+  SharedPreferences _prefs;
+  Internationalization _int;
+
   List<String> languages = [EnglishLocale, SpanishLocale];
   String currentLanguage;
-
-  SharedPreferences prefs;
 
   @override
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () async {
-      prefs = await SharedPreferences.getInstance();
-    });
+    Future.delayed(Duration.zero, () => initWidet());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      child: DropdownButton<String>(
-        items: languages.map<DropdownMenuItem<String>>(
-          (String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value, style: textStyle),
-            );
-          },
-        ).toList(),
-        onChanged: (String value) => updateLanguage(value),
-        icon: Icon(
-          Icons.language,
-          color: reversePrimaryColor,
-        ),
-        underline: SizedBox(),
+    _int = Internationalization(context);
+
+    return PopupMenuButton(
+      itemBuilder: (context) {
+        var list = List<PopupMenuEntry<String>>();
+        list.add(
+          PopupMenuItem(
+            child: Text(
+              _int.getString(settingLanguageKey),
+            ),
+            value: null,
+          ),
+        );
+        list.add(
+          PopupMenuDivider(
+            height: 10,
+          ),
+        );
+        list.add(
+          CheckedPopupMenuItem(
+            child: Text(
+              _int.getString(englishKey),
+            ),
+            value: EnglishLocale,
+            checked: currentLanguage == EnglishLocale,
+          ),
+        );
+        list.add(
+          CheckedPopupMenuItem(
+            child: Text(
+              _int.getString(spanishKey),
+            ),
+            value: SpanishLocale,
+            checked: currentLanguage == SpanishLocale,
+          ),
+        );
+        return list;
+      },
+      icon: Icon(
+        Icons.language,
+        color: Colors.white,
       ),
+      onSelected: updateLanguage,
     );
   }
 
-  updateLanguage(String locale) {
+  void initWidet() async {
+    _prefs = await SharedPreferences.getInstance();
+
+    currentLanguage = _prefs.getString(LocationSaved);
+    setState(() {});
+  }
+
+  void updateLanguage(String locale) {
     currentLanguage = locale;
 
     Locale newLocale = Locale(locale);
@@ -57,7 +91,7 @@ class _ChangeLocaleIconState extends State<ChangeLocaleIcon> {
     setState(() {});
   }
 
-  saveLocale() async {
-    prefs.setString(LocationSaved, currentLanguage);
+  void saveLocale() async {
+    _prefs.setString(LocationSaved, currentLanguage);
   }
 }

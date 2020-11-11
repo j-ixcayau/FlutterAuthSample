@@ -52,7 +52,7 @@ class Auth {
       idToken: googleAuth.idToken,
     );
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    return await _firebaseAuth.signInWithCredential(credential);
   }
 
   Future<UserCredential> loginTwitter() async {
@@ -70,8 +70,7 @@ class Auth {
     final AuthCredential twitterAuthCredential = TwitterAuthProvider.credential(
         accessToken: result.session.token, secret: result.session.secret);
 
-    return await FirebaseAuth.instance
-        .signInWithCredential(twitterAuthCredential);
+    return await _firebaseAuth.signInWithCredential(twitterAuthCredential);
   }
 
   Future<UserCredential> loginGithub(BuildContext context) async {
@@ -90,7 +89,7 @@ class Auth {
     final AuthCredential githubCredential =
         GithubAuthProvider.credential(result.token);
 
-    return await FirebaseAuth.instance.signInWithCredential(githubCredential);
+    return await _firebaseAuth.signInWithCredential(githubCredential);
   }
 
   Future<void> signOut() async {

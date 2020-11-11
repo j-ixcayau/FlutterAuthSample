@@ -1,4 +1,3 @@
-import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class CommonButton extends StatefulWidget {
@@ -21,10 +20,10 @@ class CommonButtonState extends State<CommonButton> {
       margin: const EdgeInsets.fromLTRB(0, 4, 0, 4),
       width: double.infinity,
       child: FlatButton(
-        color: accentColor,
+        color: Theme.of(context).accentColor,
         child: Text(
           widget.text,
-          style: subtitleStyle,
+          style: Theme.of(context).textTheme.button,
         ),
         onPressed: widget.callback,
       ),

@@ -24,10 +24,9 @@ class _CommonAppbarState extends State<CommonAppbar> {
     _int = Internationalization(context);
 
     return AppBar(
-      backgroundColor: primaryColor,
       title: Text(
         _int.getString(samplesKey),
-        style: reverseStyle,
+        style: Theme.of(context).textTheme.headline1,
       ),
       centerTitle: true,
       actions: [

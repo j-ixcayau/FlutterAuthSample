@@ -1,25 +1,19 @@
 import 'package:auth/localization/configLocalization.dart';
-import 'package:auth/provider/AppThemeProvider.dart';
+import 'package:auth/provider/Theme/AppThemeProvider.dart';
 import 'package:auth/routes/routeNames.dart';
 import 'package:auth/routes/routes.dart';
 import 'package:auth/theme.dart';
+import 'package:auth/utils/themeCodes.dart';
 import 'package:auth/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:sailor/sailor.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatefulWidget {
-  // Config for locale
   static void setLocale(BuildContext context, Locale locale) {
     _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
     state.setLocate(locale);
-  }
-
-  // Config for theme
-  static void setTheme(BuildContext context, ThemeMode mode) {
-    _MyAppState state = context.findAncestorStateOfType<_MyAppState>();
-    state.updateTheme(mode);
   }
 
   @override
@@ -27,10 +21,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  SharedPreferences prefs;
+  SharedPreferences _prefs;
 
   Locale _locale = Locale(EnglishLocale);
-  AppThemeProvider _themeProvider = AppThemeProvider();
+  AppThemeProvider _themeProvider;
 
   @override
   void initState() {
@@ -41,38 +35,44 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Auth Sample',
-      debugShowCheckedModeBanner: false,
-      locale: _locale,
-      supportedLocales: [
-        Locale(EnglishLocale),
-        Locale(SpanishLocale),
-      ],
-      localizationsDelegates: [
-        ConfigLocalization.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      localeResolutionCallback: (deviceLocale, supportedLocales) {
-        for (var locale in supportedLocales) {
-          if (locale.languageCode == deviceLocale.languageCode &&
-              locale.countryCode == deviceLocale.countryCode) {
-            return deviceLocale;
-          }
-        }
-        return supportedLocales.first;
+    return Consumer<AppThemeProvider>(
+      builder: (context, _appProvider, child) {
+        _themeProvider = _appProvider;
+
+        return MaterialApp(
+          title: 'Auth Sample',
+          debugShowCheckedModeBanner: false,
+          locale: _locale,
+          supportedLocales: [
+            Locale(EnglishLocale),
+            Locale(SpanishLocale),
+          ],
+          localizationsDelegates: [
+            ConfigLocalization.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          localeResolutionCallback: (deviceLocale, supportedLocales) {
+            for (var locale in supportedLocales) {
+              if (locale.languageCode == deviceLocale.languageCode &&
+                  locale.countryCode == deviceLocale.countryCode) {
+                return deviceLocale;
+              }
+            }
+            return supportedLocales.first;
+          },
+          theme: CustomTheme.getLigth(),
+          darkTheme: CustomTheme.getDark(),
+          themeMode: _themeProvider.getCurrentMode ?? ThemeMode.system,
+          navigatorKey: Routes.sailor.navigatorKey,
+          onGenerateRoute: Routes.sailor.generator(),
+          initialRoute: initialRoute,
+          navigatorObservers: [
+            // SailorLoggingObserver(),
+          ],
+        );
       },
-      theme: CustomTheme.getLigth(),
-      darkTheme: CustomTheme.getDark(),
-      themeMode: _themeProvider.getCurrentMode,
-      navigatorKey: Routes.sailor.navigatorKey,
-      onGenerateRoute: Routes.sailor.generator(),
-      initialRoute: initialRoute,
-      navigatorObservers: [
-        SailorLoggingObserver(),
-      ],
     );
   }
 
@@ -82,42 +82,26 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initConfigs() async {
-    prefs = await SharedPreferences.getInstance();
+    _prefs = await SharedPreferences.getInstance();
 
     configLanguage();
     configTheme();
   }
 
   void configLanguage() {
-    final String localeSaved = prefs.getString(LocationSaved);
+    final String localeSaved = _prefs.getString(LocationSaved);
 
     if (localeSaved != null && localeSaved.trim().isNotEmpty)
       setLocate(Locale(localeSaved));
+    else
+      Future.delayed(Duration(seconds: 1),
+          () => _prefs.setString(LocationSaved, _locale.languageCode));
   }
 
   void configTheme() {
-    _themeProvider.addListener(() {
-      setState(() {});
-    });
+    final String themeSaved = _prefs.getString(ThemeSaved);
 
-    bool themeSaved = prefs.getBool(ThemeSaved);
-    if (themeSaved == null) {
-      themeSaved = _themeProvider.getCurrentMode == ThemeMode.dark;
-    }
-    updateTheme(themeSaved ? ThemeMode.dark : ThemeMode.light);
-  }
-
-  void updateTheme(ThemeMode mode) {
-    _themeProvider.setCurrentMode = mode;
-
-    prefs.setBool(ThemeSaved, mode == ThemeMode.dark);
-    if (mode == ThemeMode.light) {
-      CustomTheme.setLight();
-      prefs.setBool(ThemeSaved, false);
-    } else if (mode == ThemeMode.dark) {
-      CustomTheme.setDark();
-      prefs.setBool(ThemeSaved, true);
-    }
-    setState(() {});
+    _themeProvider.setCurrentMode = _themeProvider.getThemeMode(themeSaved);
+    // setState(() {});
   }
 }
