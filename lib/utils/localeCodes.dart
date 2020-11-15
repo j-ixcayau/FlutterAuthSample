@@ -44,3 +44,4 @@ const String noLocationSavedKey = "noLocationSaved";
 const String needLocationAccessKey = "needLocationAccess";
 const String needDevieLocationKey = "needDevieLocation";
 const String homeKey = "home";
+const String appFailedKey = "appFailed";

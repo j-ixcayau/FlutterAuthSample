@@ -5,8 +5,8 @@ import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:github_sign_in/github_sign_in.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class Auth {
-  Auth() {
+class AuthService {
+  AuthService() {
     _firebaseAuth = FirebaseAuth.instance;
   }
 

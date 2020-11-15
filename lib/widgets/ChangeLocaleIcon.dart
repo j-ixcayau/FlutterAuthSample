@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:auth/app.dart';
-import 'package:auth/localization/internationalization.dart';
-import 'package:auth/utils/utils.dart';
+import 'package:auth/localization/Internationalization.dart';
+import 'package:auth/utils/Utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +22,7 @@ class _ChangeLocaleIconState extends State<ChangeLocaleIcon> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () => initWidet());
+    Future.delayed(Duration.zero, initWidet);
   }
 
   @override
@@ -69,7 +69,7 @@ class _ChangeLocaleIconState extends State<ChangeLocaleIcon> {
         Icons.language,
         color: Colors.white,
       ),
-      onSelected: updateLanguage,
+      onSelected: _updateLanguage,
     );
   }
 
@@ -80,18 +80,18 @@ class _ChangeLocaleIconState extends State<ChangeLocaleIcon> {
     setState(() {});
   }
 
-  void updateLanguage(String locale) {
+  void _updateLanguage(String locale) {
     currentLanguage = locale;
 
     Locale newLocale = Locale(locale);
 
-    saveLocale();
+    _saveLocale();
 
     MyApp.setLocale(context, newLocale);
     setState(() {});
   }
 
-  void saveLocale() async {
+  void _saveLocale() async {
     _prefs.setString(LocationSaved, currentLanguage);
   }
 }

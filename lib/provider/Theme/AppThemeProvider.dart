@@ -1,10 +1,11 @@
-import 'package:auth/utils/themeCodes.dart';
+import 'package:auth/utils/ThemeCodes.dart';
 import 'package:flutter/material.dart';
 
 class AppThemeProvider with ChangeNotifier {
   ThemeMode _mode;
 
   ThemeMode get getCurrentMode => _mode;
+
   set setCurrentMode(ThemeMode mode) {
     this._mode = mode;
     notifyListeners();

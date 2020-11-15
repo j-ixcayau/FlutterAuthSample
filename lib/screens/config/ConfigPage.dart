@@ -1,7 +1,7 @@
-import 'package:auth/localization/internationalization.dart';
+import 'package:auth/localization/Internationalization.dart';
 import 'package:auth/provider/Theme/AppThemeProvider.dart';
-import 'package:auth/utils/localeCodes.dart';
-import 'package:auth/utils/themeCodes.dart';
+import 'package:auth/utils/LocaleCodes.dart';
+import 'package:auth/utils/ThemeCodes.dart';
 import 'package:auth/widgets/BaseScroll.dart';
 import 'package:auth/widgets/CommonAppbar.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +22,15 @@ class _ConfigPageState extends State<ConfigPage> {
   ThemeMode _themeMode = ThemeMode.system;
 
   @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
+
+  @override
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () => initPage());
+    Future.delayed(Duration.zero, _initPage);
   }
 
   @override
@@ -44,7 +49,7 @@ class _ConfigPageState extends State<ConfigPage> {
             ),
             value: ThemeMode.dark,
             groupValue: _themeMode,
-            onChanged: updateTheme,
+            onChanged: _updateTheme,
           ),
           RadioListTile<ThemeMode>(
             title: Text(
@@ -53,7 +58,7 @@ class _ConfigPageState extends State<ConfigPage> {
             ),
             value: ThemeMode.light,
             groupValue: _themeMode,
-            onChanged: updateTheme,
+            onChanged: _updateTheme,
           ),
           RadioListTile<ThemeMode>(
             title: Text(
@@ -62,14 +67,14 @@ class _ConfigPageState extends State<ConfigPage> {
             ),
             value: ThemeMode.system,
             groupValue: _themeMode,
-            onChanged: updateTheme,
+            onChanged: _updateTheme,
           ),
         ],
       ),
     );
   }
 
-  void initPage() async {
+  void _initPage() async {
     _prefs = await SharedPreferences.getInstance();
 
     final String mode = _prefs.getString(ThemeSaved);
@@ -78,7 +83,7 @@ class _ConfigPageState extends State<ConfigPage> {
     setState(() {});
   }
 
-  void updateTheme(ThemeMode value) {
+  void _updateTheme(ThemeMode value) {
     _themeMode = value;
     _prefs.setString(ThemeSaved, _themeProvider.getThemeStr(value));
 

@@ -1,8 +1,8 @@
 import 'package:auth/app.dart';
 import 'package:auth/provider/Theme/AppThemeProvider.dart';
 import 'package:auth/provider/User/UserProvider.dart';
-import 'package:auth/routes/routes.dart';
-import 'package:auth/services/Auth/Auth.dart';
+import 'package:auth/routes/Routes.dart';
+import 'package:auth/services/auth/AuthService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ Future<void> main() async {
       create: (context) => AppThemeProvider(),
       child: MultiProvider(
         providers: [
-          StreamProvider<User>.value(value: Auth().authStateChanges()),
+          StreamProvider<User>.value(value: AuthService().authStateChanges()),
           ChangeNotifierProvider(create: (_) => UserProvider()),
         ],
         child: MyApp(),

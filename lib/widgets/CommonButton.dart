@@ -25,7 +25,7 @@ class CommonButtonState extends State<CommonButton> {
           widget.text,
           style: Theme.of(context).textTheme.button,
         ),
-        onPressed: widget.callback,
+        onPressed: () => widget.callback(),
       ),
     );
   }

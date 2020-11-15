@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:auth/utils/localeCodes.dart';
+import 'package:auth/utils/LocaleCodes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,7 +14,7 @@ class ConfigLocalization {
 
   Map<String, String> _localizedValues;
 
-  Future load() async {
+  Future _load() async {
     String jsonLanguage = await rootBundle
         .loadString("lib/localization/lang/${locale.languageCode}.json");
 
@@ -45,7 +45,7 @@ class _ConfigLocalizationDelegate
   @override
   Future<ConfigLocalization> load(Locale locale) async {
     ConfigLocalization localization = ConfigLocalization(locale);
-    await localization.load();
+    await localization._load();
 
     return localization;
   }

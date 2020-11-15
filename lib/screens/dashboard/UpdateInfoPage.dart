@@ -1,9 +1,10 @@
-import 'package:auth/common/dialogs/commonsDialogs.dart';
-import 'package:auth/localization/internationalization.dart';
-import 'package:auth/model/user/user.dart';
+import 'package:auth/common/dialogs/CommonDialogs.dart';
+import 'package:auth/common/progressDialog/ProgressDialog.dart';
+import 'package:auth/localization/Internationalization.dart';
+import 'package:auth/model/user/User.dart';
 import 'package:auth/provider/User/UserProvider.dart';
-import 'package:auth/routes/routeNames.dart';
-import 'package:auth/utils/utils.dart';
+import 'package:auth/routes/RouteNames.dart';
+import 'package:auth/utils/Utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
 import 'package:auth/widgets/CommonAppbar.dart';
 import 'package:auth/widgets/CommonButton.dart';
@@ -38,6 +39,11 @@ class _UpdateInfoPageState extends State<UpdateInfoPage> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
+
+  @override
   void initState() {
     super.initState();
 
@@ -47,12 +53,11 @@ class _UpdateInfoPageState extends State<UpdateInfoPage> {
     _descriptionController = TextEditingController(text: "");
     _geoController = TextEditingController(text: "");
 
-    Future.delayed(Duration.zero, () => initPage());
+    Future.delayed(Duration.zero, _initPage);
   }
 
   @override
   Widget build(BuildContext context) {
-    _pr = ProgressDialog(context);
     _int = Internationalization(context);
 
     _userProvider = Provider.of<UserProvider>(context);
@@ -95,7 +100,7 @@ class _UpdateInfoPageState extends State<UpdateInfoPage> {
                   controller: _geoController,
                   hint: _int.getString(locationKey),
                   prefixIcon: CommonIcon(Icons.location_on),
-                  onTap: () => checkLocationPermissions(),
+                  onTap: _checkLocationPermissions,
                 ),
               ],
             ),
@@ -103,38 +108,42 @@ class _UpdateInfoPageState extends State<UpdateInfoPage> {
           SizedBox(height: 50),
           CommonButton(
             text: _int.getString(updateKey),
-            callback: () => updateInfo(),
+            callback: _updateInfo,
           ),
         ],
       ),
     );
   }
 
-  void initPage() {
+  void _initPage() {
+    _pr = ProgressDialog(context);
+
     user = _userProvider.getUser;
 
     _nameController.text = user.getName;
     _phoneController.text = user.getPhone;
     _addressController.text = user.getAddress;
     _descriptionController.text = user.getDescription;
-    _geoController.text =
-        "${user.getHomeLocation.latitude} / ${user.getHomeLocation.longitude}";
+
+    if (user.getHomeLocation != null)
+      _geoController.text =
+          "${user.getHomeLocation.latitude} / ${user.getHomeLocation.longitude}";
   }
 
-  void checkLocationPermissions() async {
+  void _checkLocationPermissions() async {
     _pr.show();
 
     LocationPermission permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.always ||
         permission == LocationPermission.whileInUse) {
-      checkAppLicationEnable();
+      _checkAppLicationEnable();
     } else {
       permission = await Geolocator.requestPermission();
 
       if (permission == LocationPermission.always ||
           permission == LocationPermission.whileInUse)
-        checkAppLicationEnable();
+        _checkAppLicationEnable();
       else {
         _pr.hide();
         commonOkDialog(context, _int.getString(needLocationAccessKey));
@@ -142,17 +151,17 @@ class _UpdateInfoPageState extends State<UpdateInfoPage> {
     }
   }
 
-  void checkAppLicationEnable() async {
+  void _checkAppLicationEnable() async {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (isLocationServiceEnabled) {
-      requestLocation();
+      _requestLocation();
     } else {
       await Geolocator.openLocationSettings();
 
       isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
       if (isLocationServiceEnabled)
-        requestLocation();
+        _requestLocation();
       else {
         _pr.hide();
         commonOkDialog(context, _int.getString(needDevieLocationKey));
@@ -160,7 +169,7 @@ class _UpdateInfoPageState extends State<UpdateInfoPage> {
     }
   }
 
-  void requestLocation() async {
+  void _requestLocation() async {
     final Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -170,7 +179,7 @@ class _UpdateInfoPageState extends State<UpdateInfoPage> {
     _pr.hide();
   }
 
-  void updateInfo() async {
+  void _updateInfo() async {
     if (_formKey.currentState.validate()) {
       user.setName = _nameController.text;
       user.setPhone = _phoneController.text;

@@ -1,10 +1,11 @@
-import 'package:auth/common/dialogs/commonsDialogs.dart';
+import 'package:auth/common/dialogs/CommonDialogs.dart';
+import 'package:auth/common/progressDialog/ProgressDialog.dart';
 import 'package:auth/enums/AuthType.dart';
-import 'package:auth/localization/internationalization.dart';
+import 'package:auth/localization/Internationalization.dart';
 import 'package:auth/provider/User/UserProvider.dart';
-import 'package:auth/routes/routeNames.dart';
-import 'package:auth/services/Auth/Auth.dart';
-import 'package:auth/utils/utils.dart';
+import 'package:auth/routes/RouteNames.dart';
+import 'package:auth/services/auth/AuthService.dart';
+import 'package:auth/utils/Utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
 import 'package:auth/widgets/CommonButton.dart';
 import 'package:auth/widgets/CommonIcon.dart';
@@ -14,21 +15,21 @@ import 'package:auth/widgets/SocialButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:auth/model/user/user.dart' as usr;
+import 'package:auth/model/user/User.dart' as usr;
 
-class LoginOptions extends StatefulWidget {
+class LoginOptionsPage extends StatefulWidget {
   @override
-  _LoginOptionsState createState() => _LoginOptionsState();
+  _LoginOptionsPageState createState() => _LoginOptionsPageState();
 }
 
-class _LoginOptionsState extends State<LoginOptions> {
+class _LoginOptionsPageState extends State<LoginOptionsPage> {
   ProgressDialog _pr;
   Internationalization _int;
 
   // Provider
   UserProvider _userProvider;
 
-  Auth _auth = Auth();
+  AuthService _auth = AuthService();
 
   TextEditingController _userController;
   TextEditingController _passwordController;
@@ -36,16 +37,22 @@ class _LoginOptionsState extends State<LoginOptions> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
+
+  @override
   void initState() {
     super.initState();
 
     _userController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
+
+    Future.delayed(Duration.zero, _initPage);
   }
 
   @override
   Widget build(BuildContext context) {
-    _pr = ProgressDialog(context);
     _int = Internationalization(context);
 
     _userProvider = Provider.of<UserProvider>(context);
@@ -88,30 +95,30 @@ class _LoginOptionsState extends State<LoginOptions> {
             SizedBox(height: 20),
             CommonButton(
               text: _int.getString(continueKey),
-              callback: () => validateForm(),
+              callback: _validateForm,
             ),
             SocialButton(
               callback: null,
               type: AuthType.apple,
             ),
             SocialButton(
-              callback: () => loginWith(AuthType.google),
+              callback: () => _loginWith(AuthType.google),
               type: AuthType.google,
             ),
             SocialButton(
-              callback: () => loginWith(AuthType.twitter),
+              callback: () => _loginWith(AuthType.twitter),
               type: AuthType.twitter,
             ),
             SocialButton(
-              callback: () => loginWith(AuthType.facebook),
+              callback: () => _loginWith(AuthType.facebook),
               type: AuthType.facebook,
             ),
             SocialButton(
-              callback: () => loginWith(AuthType.github),
+              callback: () => _loginWith(AuthType.github),
               type: AuthType.github,
             ),
             CommonButton(
-              callback: () => navigateToRegister(),
+              callback: _navigateToRegister,
               text: _int.getString(registerKey),
             ),
             SizedBox(height: 10),
@@ -125,17 +132,21 @@ class _LoginOptionsState extends State<LoginOptions> {
     );
   }
 
-  void navigateToRegister() {
+  void _initPage() {
+    _pr = ProgressDialog(context);
+  }
+
+  void _navigateToRegister() {
     navigateToPage(registerRoute);
   }
 
-  void validateForm() async {
+  void _validateForm() async {
     if (_formKey.currentState.validate()) {
-      loginWith(AuthType.email);
+      _loginWith(AuthType.email);
     }
   }
 
-  void loginWith(AuthType type) async {
+  void _loginWith(AuthType type) async {
     _pr.show();
     try {
       UserCredential userCredential;
@@ -164,32 +175,32 @@ class _LoginOptionsState extends State<LoginOptions> {
           break;
       }
 
-      if (userCredential != null) getUserInfo(userCredential);
+      if (userCredential != null)
+        _getUserInfo(userCredential);
+      else
+        _pr.hide();
     } on FirebaseAuthException catch (e) {
       _pr.hide();
 
-      print("AUTH ERROR ----- AUTH ERROR");
+      print("UserInfo: AUTH ERROR ----- AUTH ERROR");
       print(e);
-      showUserError(e.code);
+      _showUserError(e.code);
     }
   }
 
-  void getUserInfo(UserCredential credential) async {
-    final usr.User user = await _userProvider
-        .requestUser(credential.user.uid)
-        .catchError((error) {
-      print(error);
+  void _getUserInfo(UserCredential credential) async {
+    await _userProvider.requestUser(credential.user.uid).then((user) async {
+      if (user != null) {
+        _userProvider.setUser = user;
+
+        _navigateToDashboard();
+      } else {
+        _registerUser(credential);
+      }
     });
-
-    if (user != null) {
-      _userProvider.setUser = user;
-      navigateToDashboard();
-    } else {
-      registerUser(credential);
-    }
   }
 
-  void registerUser(UserCredential credential) async {
+  void _registerUser(UserCredential credential) async {
     usr.User user = usr.User(
       id: credential.user.uid,
       name: credential.user.displayName,
@@ -201,19 +212,19 @@ class _LoginOptionsState extends State<LoginOptions> {
       user = await _userProvider.requestUser(credential.user.uid);
       _userProvider.setUser = user;
 
-      navigateToDashboard();
+      _navigateToDashboard();
     }).catchError((error) {
       _pr.hide();
       commonOkDialog(context, error);
     });
   }
 
-  void navigateToDashboard() {
+  void _navigateToDashboard() {
     _pr.hide();
     navigateToPage(dashboardRoute, back: false);
   }
 
-  void showUserError(String err) {
+  void _showUserError(String err) {
     String error = "";
 
     switch (err) {

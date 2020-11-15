@@ -1,4 +1,4 @@
-import 'package:auth/common/dialogs/commonsDialogs.dart';
+import 'package:auth/common/dialogs/CommonDialogs.dart';
 import 'package:flutter/material.dart';
 
 class OnCloseApp extends StatefulWidget {

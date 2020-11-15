@@ -37,5 +37,6 @@
     "noLocationSaved": "Location isn't currently saved",
     "needLocationAccess": "App needs location access",
     "needDevieLocation": "Need to enable device location",
-    "home": "Home"
+    "home": "Home",
+    "appFailed": "An error has occurred\nPlease close de app and try again"
 }

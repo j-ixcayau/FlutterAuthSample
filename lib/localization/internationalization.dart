@@ -1,4 +1,4 @@
-import 'package:auth/localization/configLocalization.dart';
+import 'package:auth/localization/ConfigLocalization.dart';
 import 'package:flutter/material.dart';
 
 class Internationalization {

@@ -37,5 +37,6 @@
     "noLocationSaved": "No hay locación guardada actualmente",
     "needLocationAccess": "La aplicación necesita acceso a la ubicación",
     "needDevieLocation": "Necesita habilitar la ubicación del dispositivo",
-    "home": "Hogar"
+    "home": "Hogar",
+    "appFailed": "Ah ocurrido un error, por favor cierra el app e intentalo de nuevo"
 }

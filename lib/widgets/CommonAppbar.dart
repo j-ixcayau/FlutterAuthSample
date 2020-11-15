@@ -1,5 +1,5 @@
-import 'package:auth/localization/internationalization.dart';
-import 'package:auth/utils/utils.dart';
+import 'package:auth/localization/Internationalization.dart';
+import 'package:auth/utils/Utils.dart';
 import 'package:auth/widgets/ChangeLocaleIcon.dart';
 import 'package:flutter/material.dart';
 

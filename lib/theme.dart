@@ -1,6 +1,6 @@
-import 'package:auth/utils/styles.dart';
+import 'package:auth/utils/Styles.dart';
 import 'package:flutter/material.dart';
-import 'package:auth/utils/utils.dart';
+import 'package:auth/utils/Utils.dart';
 
 class CustomTheme {
   static ThemeData getLigth() {

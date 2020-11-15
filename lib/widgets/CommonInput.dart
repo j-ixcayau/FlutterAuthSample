@@ -1,5 +1,5 @@
-import 'package:auth/localization/internationalization.dart';
-import 'package:auth/utils/utils.dart';
+import 'package:auth/localization/Internationalization.dart';
+import 'package:auth/utils/Utils.dart';
 import 'package:flutter/material.dart';
 
 class CommonInput extends StatefulWidget {
@@ -28,13 +28,6 @@ class CommonInput extends StatefulWidget {
 
 class _CommonInputState extends State<CommonInput> {
   Internationalization _int;
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future.delayed(Duration.zero, () => initWidget);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +85,7 @@ class _CommonInputState extends State<CommonInput> {
                           : whiteColor.withOpacity(0.5),
                     ),
               ),
-              validator: (String text) => validateField(text),
+              validator: _validateField,
             ),
           ),
         ),
@@ -100,11 +93,7 @@ class _CommonInputState extends State<CommonInput> {
     );
   }
 
-  void initWidget() {
-    setState(() {});
-  }
-
-  String validateField(String text) {
+  String _validateField(String text) {
     if (text.trim().isEmpty) {
       return _int.getString(emptyFieldKey);
     } else {

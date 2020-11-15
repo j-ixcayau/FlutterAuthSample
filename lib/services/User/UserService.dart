@@ -1,4 +1,4 @@
-import 'package:auth/model/user/user.dart';
+import 'package:auth/model/user/User.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserService {

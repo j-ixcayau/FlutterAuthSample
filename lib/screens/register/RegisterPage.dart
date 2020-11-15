@@ -1,31 +1,32 @@
-import 'package:auth/common/dialogs/commonsDialogs.dart';
-import 'package:auth/localization/internationalization.dart';
+import 'package:auth/common/dialogs/CommonDialogs.dart';
+import 'package:auth/common/progressDialog/ProgressDialog.dart';
+import 'package:auth/localization/Internationalization.dart';
 import 'package:auth/provider/User/UserProvider.dart';
-import 'package:auth/routes/routeNames.dart';
-import 'package:auth/services/Auth/Auth.dart';
-import 'package:auth/utils/utils.dart';
+import 'package:auth/routes/RouteNames.dart';
+import 'package:auth/services/auth/AuthService.dart';
+import 'package:auth/utils/Utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
 import 'package:auth/widgets/CommonButton.dart';
 import 'package:auth/widgets/CommonIcon.dart';
 import 'package:auth/widgets/CommonInput.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:auth/model/user/user.dart' as usr;
+import 'package:auth/model/user/User.dart' as usr;
 import 'package:provider/provider.dart';
 
-class Register extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _RegisterState createState() => _RegisterState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegisterPageState extends State<RegisterPage> {
   Internationalization _int;
   ProgressDialog _pr;
 
   // Provider
   UserProvider _userProvider;
 
-  Auth _auth = Auth();
+  AuthService _auth = AuthService();
 
   TextEditingController _userController;
   TextEditingController _passwordController;
@@ -33,17 +34,23 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
+
+  @override
   void initState() {
     super.initState();
 
     _userController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
+
+    Future.delayed(Duration.zero, _initPage);
   }
 
   @override
   Widget build(BuildContext context) {
     _int = Internationalization(context);
-    _pr = ProgressDialog(context);
 
     _userProvider = Provider.of<UserProvider>(context);
 
@@ -83,15 +90,20 @@ class _RegisterState extends State<Register> {
           ),
           SizedBox(height: 20),
           CommonButton(
-              text: _int.getString(continueKey),
-              callback: () => validateForm()),
+            text: _int.getString(continueKey),
+            callback: _validateForm,
+          ),
           SizedBox(height: 20),
         ],
       ),
     );
   }
 
-  validateForm() async {
+  void _initPage() {
+    _pr = ProgressDialog(context);
+  }
+
+  void _validateForm() async {
     if (_formKey.currentState.validate()) {
       try {
         _pr.show();
@@ -103,17 +115,17 @@ class _RegisterState extends State<Register> {
             await _auth.createUserWithEmailAndPassword(email, password);
 
         if (userCredential != null)
-          registerUser(userCredential);
+          _registerUser(userCredential);
         else
           _pr.hide();
       } on FirebaseAuthException catch (e) {
         _pr.hide();
-        showUserError(e.code);
+        _showUserError(e.code);
       }
     }
   }
 
-  void registerUser(UserCredential credential) async {
+  void _registerUser(UserCredential credential) async {
     usr.User user = usr.User(
       id: credential.user.uid,
       name: credential.user.displayName,
@@ -125,19 +137,19 @@ class _RegisterState extends State<Register> {
       user = await _userProvider.requestUser(credential.user.uid);
       _userProvider.setUser = user;
 
-      navigateToDashboard();
+      _navigateToDashboard();
     }).catchError((error) {
       _pr.hide();
       commonOkDialog(context, error.toString());
     });
   }
 
-  void navigateToDashboard() {
+  void _navigateToDashboard() {
     _pr.hide();
     navigateToPage(dashboardRoute, back: false);
   }
 
-  showUserError(String err) {
+  void _showUserError(String err) {
     String error = "";
 
     switch (err) {

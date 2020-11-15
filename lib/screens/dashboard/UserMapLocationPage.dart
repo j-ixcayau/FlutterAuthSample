@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:auth/localization/internationalization.dart';
+import 'package:auth/localization/Internationalization.dart';
 import 'package:auth/provider/User/UserProvider.dart';
-import 'package:auth/utils/localeCodes.dart';
+import 'package:auth/utils/LocaleCodes.dart';
 import 'package:auth/widgets/CommonAppbar.dart';
 import 'package:auth/widgets/CommonButton.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,12 +12,12 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class UserMapLocation extends StatefulWidget {
+class UserMapLocationPage extends StatefulWidget {
   @override
-  _UserMapLocationState createState() => _UserMapLocationState();
+  _UserMapLocationPageState createState() => _UserMapLocationPageState();
 }
 
-class _UserMapLocationState extends State<UserMapLocation> {
+class _UserMapLocationPageState extends State<UserMapLocationPage> {
   Internationalization _int;
 
   UserProvider _userProvider;
@@ -28,10 +28,8 @@ class _UserMapLocationState extends State<UserMapLocation> {
   final Set<Marker> _markers = Set();
 
   @override
-  void initState() {
-    super.initState();
-
-    Future.delayed(Duration.zero, () => initPage());
+  void setState(fn) {
+    if (mounted) super.setState(fn);
   }
 
   @override
@@ -59,7 +57,7 @@ class _UserMapLocationState extends State<UserMapLocation> {
               constraints: BoxConstraints(maxWidth: 225),
               child: CommonButton(
                 text: _int.getString(homeKey),
-                callback: () => initialLocation(),
+                callback: _initialLocation,
               ),
             ),
           ),
@@ -68,24 +66,20 @@ class _UserMapLocationState extends State<UserMapLocation> {
     );
   }
 
-  void initPage() {
-    //
-  }
-
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
 
-    initialLocation();
+    _initialLocation();
   }
 
-  void initialLocation() async {
+  void _initialLocation() async {
     final GeoPoint geoPoint = _userProvider.getUser.getHomeLocation;
 
     final GoogleMapController controller = await _controller.future;
     final LatLng lang = LatLng(geoPoint.latitude, geoPoint.longitude);
 
     final Uint8List markerIcon =
-        await getBytesFromAsset('assets/icon/icon_location.png', 100);
+        await _getBytesFromAsset('assets/icon/icon_location.png', 100);
     _markers.add(
       Marker(
           markerId: MarkerId('Current'),
@@ -97,7 +91,7 @@ class _UserMapLocationState extends State<UserMapLocation> {
     setState(() {});
   }
 
-  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+  Future<Uint8List> _getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
         targetWidth: width);

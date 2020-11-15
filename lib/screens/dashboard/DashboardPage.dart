@@ -1,10 +1,11 @@
-import 'package:auth/common/dialogs/commonsDialogs.dart';
-import 'package:auth/localization/internationalization.dart';
-import 'package:auth/model/user/user.dart';
+import 'package:auth/common/dialogs/CommonDialogs.dart';
+import 'package:auth/common/progressDialog/ProgressDialog.dart';
+import 'package:auth/localization/Internationalization.dart';
+import 'package:auth/model/user/User.dart';
 import 'package:auth/provider/User/UserProvider.dart';
-import 'package:auth/routes/routeNames.dart';
-import 'package:auth/services/Auth/Auth.dart';
-import 'package:auth/utils/utils.dart';
+import 'package:auth/routes/RouteNames.dart';
+import 'package:auth/services/auth/AuthService.dart';
+import 'package:auth/utils/Utils.dart';
 import 'package:auth/widgets/BaseScroll.dart';
 import 'package:auth/widgets/CommonAppbar.dart';
 import 'package:auth/widgets/CommonButton.dart';
@@ -14,12 +15,12 @@ import 'package:firebase_auth/firebase_auth.dart' as fUser;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Dashboard extends StatefulWidget {
+class DashboardPage extends StatefulWidget {
   @override
-  _DashboardState createState() => _DashboardState();
+  _DashboardPageState createState() => _DashboardPageState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardPageState extends State<DashboardPage> {
   ProgressDialog _pr;
   Internationalization _int;
 
@@ -31,10 +32,15 @@ class _DashboardState extends State<Dashboard> {
   User user = User();
 
   @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
+
+  @override
   void initState() {
     super.initState();
 
-    Future.delayed(Duration.zero, () => initPage());
+    Future.delayed(Duration.zero, _initPage);
   }
 
   @override
@@ -85,11 +91,11 @@ class _DashboardState extends State<Dashboard> {
             SizedBox(height: 40),
             CommonButton(
               text: _int.getString(updateDataKey),
-              callback: () => navigateToUpdate(),
+              callback: _navigateToUpdate,
             ),
             CommonButton(
               text: _int.getString(logoutKey),
-              callback: () => showLogoutDialog(),
+              callback: _showLogoutDialog,
             ),
             SizedBox(height: 100),
           ],
@@ -98,18 +104,18 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  void initPage() {
+  void _initPage() {
     _pr = ProgressDialog(context);
 
     if (_userProvider.getUser != null) {
       user = _userProvider.getUser;
       setState(() {});
     } else {
-      loadUserInfo();
+      _loadUserInfo();
     }
   }
 
-  void loadUserInfo() async {
+  void _loadUserInfo() async {
     _pr.show();
     user = await _userProvider.requestUser(_firebaseUser.uid);
 
@@ -121,7 +127,7 @@ class _DashboardState extends State<Dashboard> {
 
   ///
 
-  void navigateToUpdate() async {
+  void _navigateToUpdate() async {
     await navigateToPage(updateInfoRoute);
 
     user = _userProvider.getUser;
@@ -130,16 +136,15 @@ class _DashboardState extends State<Dashboard> {
 
   ///
 
-  void showLogoutDialog() {
+  void _showLogoutDialog() {
     commonOkDialog(context, _int.getString(logoutKey),
-        cancel: false, function: () => signOut());
+        cancel: false, function: _signOut);
   }
 
-  void signOut() async {
+  void _signOut() async {
     _pr.show();
-    await Auth().signOut().then((value) {
+    await AuthService().signOut().then((value) {
       _pr.hide();
-
       navigateToPage(loginOptionsRoute, back: false);
     });
   }
